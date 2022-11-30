@@ -1,4 +1,4 @@
-package web.Util;
+package web.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +9,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
-import web.models.User;
+import web.model.User;
 public class Util {
     public static final String DB_URL = "jdbc:mysql://localhost:3306/alegakom_basetest";
     public static final String DB_Driver = "com.mysql.cj.jdbc.Driver";

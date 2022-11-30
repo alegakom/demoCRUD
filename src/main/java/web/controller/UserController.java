@@ -1,12 +1,17 @@
 package web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import web.Service.UserServiceImpl;
-import web.models.User;
+import org.springframework.web.bind.annotation.*;
+import web.dao.UserDaoImpl;
+import web.service.UserService;
+import web.service.UserServiceImpl;
+import web.model.User;
 
+import javax.persistence.EntityManager;
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,26 +19,57 @@ import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
-    User user = new User("Oleg", "Komissarov", 2);
-//    User user1 = new User(2,30,"Alex");
-//    User user2 = new User(3,42,"Kirill");
-//    User user3 = new User(4,55,"Sergay");
-//    User user4 = new User(5,2,"Bogdan");
 
+    private final UserService us;
 
-    UserServiceImpl csi = new UserServiceImpl();
+    @Autowired()
+    public UserController(UserService us) {
+        this.us = us;
+    }
 
 
     @GetMapping(value = "/user")
-    public String getUsers(@RequestParam(value = "count", defaultValue = "5") int count, ModelMap model){
-        List<User> userList = new ArrayList<>();
-        userList.add(user);
-//        userList.add(user1);
-//        userList.add(user2);
-//        userList.add(user3);
-//        userList.add(user4);
-        model.addAttribute("userList", userList.stream().limit(count).collect(Collectors.toList()));
+    public String getUsers(@RequestParam(value = "count", defaultValue = "0") int count, ModelMap model){
+        List<User> userList;
+        userList = us.getAllUsers();
+        model.addAttribute("userList",
+                userList.stream().limit(count).toList());
         // нужно не забыть указать передаваемый объект "userList" в .html
         return "user";
     }
+    @GetMapping(value = "/user/save")
+    public String saveUser(@RequestParam(value = "name") String name,
+                           @RequestParam(value = "lastName") String lastName,
+                           @RequestParam(value = "age") int age, ModelMap model){
+        User user = new User(name, lastName, age);
+        us.saveUser(user);
+        return "user";
+    }
+    @GetMapping("/user/delete/{id}")
+    public String delete(@PathVariable("id") long id) {
+        us.removeUser(id);
+        return "redirect:/user";
+    }
+
+    @GetMapping(value = "user/edit/{id}") // этот метод вызывает страницу update
+    public String update(@PathVariable(value = "id") int id){
+        return "update";
+    }
+    @GetMapping(value ="user/edit/{id}") // а в этот через форму я хотел передать данные,
+    // но я не могу их одновременно заставить работать
+
+    public String updateUserById(@PathVariable(value = "id") int id,
+                                 @RequestParam(value = "name") String name,
+                                 @RequestParam(value = "lastName") String lastName,
+                                 @RequestParam(value = "age") int age){
+        User user = us.getUserById(id);
+        user.setName(name);
+        user.setLastName(lastName);
+        user.setAge(age);
+        us.updateUser(user);
+        return "update";
+    }
+
+
+
 }

@@ -1,15 +1,18 @@
 package web;
-import web.Service.UserService;
-import web.Service.UserServiceImpl;
+import web.dao.UserDao;
+import web.dao.UserDaoImpl;
+import web.service.UserService;
+import web.service.UserServiceImpl;
 
 public class Test {
     public static void main(String[] args) {
-        UserService us = new UserServiceImpl();
+//        UserDao ud = new UserDaoImpl();
+//        UserService us = new UserServiceImpl(ud);
 //        us.createUsersTable();
 //        us.cleanUsersTable();
 //        us.dropUsersTable();
-//        us.removeUserById(2);
+//        us.removeUser(1);
 //        us.getAllUsers();
-        us.saveUser("Oleg", "Komissarov", 29);
+//        us.saveUser("Oleg", "Komissarov", 29);
     }
 }

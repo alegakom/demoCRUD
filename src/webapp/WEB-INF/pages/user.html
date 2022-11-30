@@ -1,37 +1,52 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title> List of users</title>
 </head>
-<body>
-<table class="table table-dark">
-    <thead>
-    <tr>
-        <th scope ="col">ID</th>
-        <th scope="col">Name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="user: ${userList}">
-        <td th:text="${user.id}"/>
-        <td th:text="${user.name}"/>
+<style>
+    body {
+        background: antiquewhite;
+    }
+</style>
+<div>
+    <table class="table table-dark" style="background: black">
+        <p><button onclick="window.location.href='/user?count=1';">Show 1 user</button>
+        <button onclick="window.location.href='/user?count=2';">Show 2 user</button>
+        <button onclick="window.location.href='/user?count=3';">Show 3 user</button>
+        <button onclick="window.location.href='/user?count=4';">Show 4 user</button>
+        <button onclick="window.location.href='/user?count=5';">Show 5 user</button>
+        <button onclick="window.location.href='/user?count=100';">Show 100 users</button> </p>
+        <form method="GET" action="/user/save">
+            <p>Enter user:</p>
+            <p><label for="name"></label><input type="text" name="name" value="" pattern="^[a-zA-Z]+$" id="name" placeholder="Name" required></p>
+            <p><label for="lastName"></label><input type="text" name="lastName" value="" pattern="^[a-zA-Z]+$" id="lastName" placeholder="Lastname" required></p>
+            <p><label for="age"></label><input type="text" name="age" value="" pattern="^[0-9]+$" id="age" placeholder="Age" required></p>
+            <p><input type="submit" value="Submit"></p>
+        </form>
+        <thead>
+        <tr>
+            <th style="background: coral" scope ="col">id</th>
+            <th style="background: coral" scope="col">Name</th>
+            <th style="background: coral" scope="col">Lastname</th>
+            <th style="background: coral" scope="col">Age</th>
+        </tr>
+        </thead>
 
-</tr>
-    </tbody>
-</table>
-<a href="/user?count=1">show 1 user</a>
-<a href="/user?count=2">show 2 user</a>
-<a href="/user?count=3">show 3 user</a>
-<a href="/user?count=4">show 4 user</a>
-<a href="/user?count=5">show 5 user</a>
-<a href="/user?count=6">show all users</a>
+        <tr th:each="user: ${userList}">
+            <td style="background: darkgrey " th:text="${user.id}"/>
+            <td style="background: darkgrey "  th:text="${user.name}"/>
+            <td style="background: darkgrey "  th:text="${user.lastName}"/>
+            <td style="background: darkgrey "  th:text="${user.age}"/>
+            <form method="GET">
+                <td>
+                        <p><input type="submit" value="Edit" th:formaction="${'/user/edit/'+ user.id}"></p>
 
-<form>
-    <p>Enter count:</p>
-    <p><input name="count" pattern="^[ 0-9]+$"></p>
-    <p><input type="submit" value="Submit"></p>
-</form>
-</body>
-</html>
+                <button type="submit" th:formaction="${'/user/delete/'+user.id}">Delete
+                </button>
+            </form>
+                </td>
+        </tr>
+    </table>
+</div>
