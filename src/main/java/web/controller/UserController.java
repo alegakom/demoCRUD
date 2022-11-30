@@ -27,9 +27,8 @@ public class UserController {
         this.us = us;
     }
 
-
     @GetMapping(value = "/user")
-    public String getUsers(@RequestParam(value = "count", defaultValue = "0") int count, ModelMap model){
+    public String getUsers(@RequestParam(value = "count", defaultValue = "100") int count, ModelMap model){
         List<User> userList;
         userList = us.getAllUsers();
         model.addAttribute("userList",
@@ -37,27 +36,25 @@ public class UserController {
         // нужно не забыть указать передаваемый объект "userList" в .html
         return "user";
     }
-    @GetMapping(value = "/user/save")
+    @PostMapping(value = "/user/save")
     public String saveUser(@RequestParam(value = "name") String name,
                            @RequestParam(value = "lastName") String lastName,
-                           @RequestParam(value = "age") int age, ModelMap model){
+                           @RequestParam(value = "age") int age){
         User user = new User(name, lastName, age);
         us.saveUser(user);
-        return "user";
+        return "redirect: /user";
     }
-    @GetMapping("/user/delete/{id}")
+    @PostMapping("/user/delete/{id}")
     public String delete(@PathVariable("id") long id) {
         us.removeUser(id);
-        return "redirect:/user";
+        return "redirect: /user";
     }
 
-    @GetMapping(value = "user/edit/{id}") // этот метод вызывает страницу update
+    @GetMapping(value = "user/update/{id}")
     public String update(@PathVariable(value = "id") int id){
         return "update";
     }
-    @GetMapping(value ="user/edit/{id}") // а в этот через форму я хотел передать данные,
-    // но я не могу их одновременно заставить работать
-
+    @PostMapping(value ="user/update/{id}")
     public String updateUserById(@PathVariable(value = "id") int id,
                                  @RequestParam(value = "name") String name,
                                  @RequestParam(value = "lastName") String lastName,
@@ -67,9 +64,6 @@ public class UserController {
         user.setLastName(lastName);
         user.setAge(age);
         us.updateUser(user);
-        return "update";
+        return "redirect: /user";
     }
-
-
-
 }

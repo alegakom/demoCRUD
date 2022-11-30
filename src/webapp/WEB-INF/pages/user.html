@@ -18,7 +18,7 @@
         <button onclick="window.location.href='/user?count=4';">Show 4 user</button>
         <button onclick="window.location.href='/user?count=5';">Show 5 user</button>
         <button onclick="window.location.href='/user?count=100';">Show 100 users</button> </p>
-        <form method="GET" action="/user/save">
+        <form method="POST" action="/user/save">
             <p>Enter user:</p>
             <p><label for="name"></label><input type="text" name="name" value="" pattern="^[a-zA-Z]+$" id="name" placeholder="Name" required></p>
             <p><label for="lastName"></label><input type="text" name="lastName" value="" pattern="^[a-zA-Z]+$" id="lastName" placeholder="Lastname" required></p>
@@ -39,14 +39,12 @@
             <td style="background: darkgrey "  th:text="${user.name}"/>
             <td style="background: darkgrey "  th:text="${user.lastName}"/>
             <td style="background: darkgrey "  th:text="${user.age}"/>
-            <form method="GET">
-                <td>
-                        <p><input type="submit" value="Edit" th:formaction="${'/user/edit/'+ user.id}"></p>
-
-                <button type="submit" th:formaction="${'/user/delete/'+user.id}">Delete
-                </button>
-            </form>
-                </td>
+            <td><form method="GET">
+                    <p><input type="submit" value="Edit" th:formaction="${'/user/update/'+ user.id}"></p>
+            </form></td>
+            <td><form method="POST">
+                    <p><button type="submit" th:formaction="${'/user/delete/'+ user.id}">Delete</button></p>
+            </form></td>
         </tr>
     </table>
 </div>
