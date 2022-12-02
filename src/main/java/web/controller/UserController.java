@@ -20,17 +20,17 @@ import java.util.stream.Collectors;
 @Controller
 public class UserController {
 
-    private final UserService us;
+    private final UserService userService;
 
     @Autowired()
     public UserController(UserService us) {
-        this.us = us;
+        this.userService = us;
     }
 
     @GetMapping(value = "/user")
     public String getUsers(@RequestParam(value = "count", defaultValue = "100") int count, ModelMap model){
         List<User> userList;
-        userList = us.getAllUsers();
+        userList = userService.getAllUsers();
         model.addAttribute("userList",
                 userList.stream().limit(count).toList());
         // нужно не забыть указать передаваемый объект "userList" в .html
@@ -41,12 +41,12 @@ public class UserController {
                            @RequestParam(value = "lastName") String lastName,
                            @RequestParam(value = "age") int age){
         User user = new User(name, lastName, age);
-        us.saveUser(user);
+        userService.saveUser(user);
         return "redirect: /user";
     }
     @PostMapping("/user/delete/{id}")
     public String delete(@PathVariable("id") long id) {
-        us.removeUser(id);
+        userService.removeUser(id);
         return "redirect: /user";
     }
 
@@ -59,11 +59,11 @@ public class UserController {
                                  @RequestParam(value = "name") String name,
                                  @RequestParam(value = "lastName") String lastName,
                                  @RequestParam(value = "age") int age){
-        User user = us.getUserById(id);
+        User user = userService.getUserById(id);
         user.setName(name);
         user.setLastName(lastName);
         user.setAge(age);
-        us.updateUser(user);
+        userService.updateUser(user);
         return "redirect: /user";
     }
 }

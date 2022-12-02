@@ -1,23 +1,11 @@
 package web.dao;
-
-import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
-import web.util.Util;
 import web.model.User;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-import java.sql.*;
 
 @Component
-@Transactional
 public class UserDaoImpl implements UserDao {
 
     @PersistenceContext
